@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    A .NET console app: the kind of internal diagnostics / production test rig a
+    hardware team writes in C# to exercise the real-time core from the outside.
+    C# is the productivity-and-tooling language here, not the real-time path.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>stagerig</AssemblyName>
+    <RootNamespace>StageRig</RootNamespace>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+</Project>

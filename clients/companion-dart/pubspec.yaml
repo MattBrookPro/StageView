@@ -1,0 +1,13 @@
+name: stage_companion
+description: >-
+  StageView tablet companion - personal monitor mixing / remote control. This is
+  the Dart core a Flutter touch UI would sit on top of; it speaks the same OSC/UDP
+  as the rest of StageView. Dart is the language; Flutter would be the cross-platform
+  touch front end.
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: ^3.0.0
+# Intentionally dependency-free: dart:io (UDP) and dart:typed_data (big-endian) are
+# all the wire format needs.

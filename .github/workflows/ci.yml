@@ -1,0 +1,72 @@
+name: CI
+
+# Build and test on every push / PR. The matrix proves the same CMake build works
+# across three OSes and three compilers (GCC, Clang, MSVC) - the cross-platform
+# signal a Qt shop cares about. Locally the author builds with MinGW; none of the
+# code is tied to one toolchain.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-test:
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: "6.8.1"
+          modules: "qtshadertools"
+          cache: true
+
+      # RtMidi's ALSA backend needs the ALSA dev headers on Linux. (Windows uses
+      # WinMM and macOS uses CoreMIDI, both already present on the runners.)
+      - name: Install ALSA dev (Linux, for RtMidi)
+        if: runner.os == 'Linux'
+        shell: bash
+        run: sudo apt-get update && sudo apt-get install -y libasound2-dev
+
+      - name: Configure
+        shell: bash
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$QT_ROOT_DIR"
+
+      - name: Build
+        shell: bash
+        run: cmake --build build --config Release --parallel
+
+      - name: Test (C++ / CTest)
+        shell: bash
+        run: ctest --test-dir build -C Release --output-on-failure
+
+      - name: Test (Python / unittest)
+        shell: bash
+        working-directory: engine
+        run: python -m unittest discover -p "test_*.py" -v
+
+      # Loads the whole QML scene headless and grabs a frame - catches QML runtime
+      # regressions (binding loops, unset required properties) that a pure build
+      # would miss. Linux-only to keep the artifact path simple.
+      - name: QML smoke (headless)
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          exe=$(find build -name stageview -type f | head -1)
+          echo "running: $exe"
+          QT_QPA_PLATFORM=offscreen "$exe" --shot "$PWD/smoke.png" --shot-delay 1200
+          test -f "$PWD/smoke.png" && echo "QML smoke OK"

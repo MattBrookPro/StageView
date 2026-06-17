@@ -1,0 +1,58 @@
+# --- C++ / CMake build output ---
+/build/
+/build-*/
+/out/
+CMakeCache.txt
+CMakeFiles/
+*.cmake.stamp
+
+# --- Qt generated ---
+*.qmlc
+*.jsc
+*.qm
+moc_*.cpp
+qrc_*.cpp
+ui_*.h
+
+# --- Python (mock engine + tooling) ---
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+
+# --- companion clients build output ---
+# C# (.NET) - scoped per project so it doesn't catch Dart's bin/ (which is source)
+clients/testrig-csharp/bin/
+clients/testrig-csharp/obj/
+clients/dashboard-csharp/bin/
+clients/dashboard-csharp/obj/
+# Free Pascal
+*.o
+*.ppu
+*.or
+*.compiled
+clients/console-pascal/stagectl
+clients/console-pascal/stagectl.exe
+# Lazarus
+*.lps
+*.res
+clients/legacy-panel-pascal/lib/
+clients/legacy-panel-pascal/legacypanel.exe
+# Dart
+.dart_tool/
+clients/**/pubspec.lock
+
+# --- audio: never commit stems/cache (copyrighted) ---
+*.wav
+*.mp3
+*.flac
+*.aiff
+*.ogg
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.user

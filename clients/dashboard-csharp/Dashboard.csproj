@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    A C# WinForms desktop app: the kind of internal diagnostics/control tooling a
+    hardware team builds in C#, where its native-Windows GUI strength pays off
+    (the productivity layer around the C++ real-time core). Sibling to the console
+    test rig in ../testrig-csharp; here the same checks run behind a GUI.
+  -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>stagedashboard</AssemblyName>
+    <RootNamespace>StageDashboard</RootNamespace>
+  </PropertyGroup>
+
+</Project>
